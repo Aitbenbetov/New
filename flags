@@ -1,0 +1,65 @@
+package main
+
+import (
+	"fmt"
+	"os"
+
+	"github.com/01-edu/z01"
+)
+
+func main() {
+	args := os.Args[1:]
+	if len(args) == 0 || args[0] == "-h" || args[0] == "--help" {
+		fmt.Println("--insert")
+		fmt.Println("  -i")
+		fmt.Println("\t This flag inserts the string into the string passed as argument.")
+		fmt.Println("--order")
+		fmt.Println("  -o")
+		fmt.Println("\t This flag will behave like a boolean, if it is called it will order the argument.")
+		return
+	}
+
+	var array []rune
+	isOrder := false
+	isAdding := false
+	var adding string
+
+	for _, v := range args {
+		if len(v) > 8 && v[:9] == "--insert=" {
+			isAdding = true
+			adding = v[9:]
+		} else if len(v) > 2 && v[:3] == "-i=" {
+			isAdding = true
+			adding = v[3:]
+		} else if len(v) > 6 && v[:7] == "--order" {
+			isOrder = true
+		} else if len(v) == 2 && v == "-o" {
+			isOrder = true
+		} else {
+			for _, ch := range v {
+				array = append(array, ch)
+			}
+		}
+	}
+
+	if isAdding {
+		for _, v := range adding {
+			array = append(array, v)
+		}
+	}
+
+	if isOrder {
+		for i := 0; i < len(array)-1; i++ {
+			for j := 0; j < len(array)-i-1; j++ {
+				if array[j] > array[j+1] {
+					array[j+1], array[j] = array[j], array[j+1]
+				}
+			}
+		}
+	}
+
+	for _, v := range array {
+		z01.PrintRune(v)
+	}
+	z01.PrintRune('\n')
+}
