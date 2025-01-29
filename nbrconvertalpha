@@ -1,0 +1,44 @@
+package main
+
+import (
+	"os"
+
+	"github.com/01-edu/z01"
+)
+
+func main() {
+	if len(os.Args) == 1 {
+		return
+	}
+
+	upper := false
+	if os.Args[1] == "--upper" {
+		upper = true
+		os.Args = os.Args[1:]
+	}
+
+	for _, arg := range os.Args[1:] {
+		n, isValid := strToInt(arg)
+		if !isValid || n < 1 || n > 26 {
+			z01.PrintRune(' ')
+		} else {
+			letter := rune(n + 96)
+			if upper {
+				letter -= 32
+			}
+			z01.PrintRune(letter)
+		}
+	}
+	z01.PrintRune('\n')
+}
+
+func strToInt(str string) (int, bool) {
+	result := 0
+	for _, r := range str {
+		if r < '0' || r > '9' {
+			return 0, false
+		}
+		result = result*10 + int(r-'0')
+	}
+	return result, true
+}
